@@ -1,0 +1,2 @@
+docker exec devx cat /home/dev/.config/devdesk/desktop-password 
+docker run -d --name devx -p 127.0.0.1:14500:14500 --read-only --cap-drop ALL --security-opt no-new-privileges --cpus 4 --memory 12g --shm-size 1g --tmpfs /tmp:rw,exec,mode=1777,size=4g -v devx-home:/home/dev nanto2vison/devx-studio:latest
