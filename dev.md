@@ -74,8 +74,8 @@ Le port web du bureau (14500) passe par un petit gateway. **Seul le chemin exact
 
 ### La cause probable (vérifiée sur xpra61)
 
-Derrière JupyterHub, la requête arrive avec son préfixe : `/user/e55696/devx/ssh` ou
-`/user/e55696/https/14500/devx/ssh`. Le gateway ne la reconnaît pas et l'envoie à Xpra, qui répond :
+Derrière JupyterHub, la requête arrive avec son préfixe : `/user/userid/devx/ssh` ou
+`/user/userid/https/14500/devx/ssh`. Le gateway ne la reconnaît pas et l'envoie à Xpra, qui répond :
 
 ```
 HTTP/1.0 403 failed to handle websocket: client does not support 'binary' protocol
@@ -87,8 +87,8 @@ Reproduit sur un bureau xpra61, SSH activé :
 | Chemin demandé | Réponse |
 | --- | --- |
 | `/devx/ssh` | `401` « a tunnel token is needed » : c'est le gateway SSH, c'est normal sans jeton |
-| `/user/e55696/devx/ssh` | **`403`** Xpra « binary protocol » |
-| `/user/e55696/https/14500/devx/ssh` | **`403`** Xpra « binary protocol » |
+| `/user/userid/devx/ssh` | **`403`** Xpra « binary protocol » |
+| `/user/userid/https/14500/devx/ssh` | **`403`** Xpra « binary protocol » |
 
 Correction côté image : accepter tout chemin qui **finit** par `/devx/ssh`. En attendant, demande que ton
 proxy retire le préfixe pour ce chemin (`/user/<nom>/devx/ssh` vers `/devx/ssh`).
@@ -102,14 +102,14 @@ supervisorctl -c /opt/devdesk/supervisor/supervisord.conf status ssh-gateway
 ```
 
 `SSH_ENABLED` doit valoir `true` : dans Settings, ou `'SSH_ENABLED': 'true'` dans `environment` du profil.
-`SSH_PUBLIC_URL` = l'adresse vue depuis ton poste, par exemple `https://myenv.corp/user/e55696`.
+`SSH_PUBLIC_URL` = l'adresse vue depuis ton poste, par exemple `https://myenv.corp/user/userid`.
 
 ### Étape 1 : dans le pod, le tunnel répond-il ?
 
 ```bash
 W='-H Connection:Upgrade -H Upgrade:websocket -H Sec-WebSocket-Version:13 -H Sec-WebSocket-Key:dGhlIHNhbXBsZSBub25jZQ=='
 curl -s -i -m 5 --noproxy '*' $W http://127.0.0.1:14500/devx/ssh | head -1                 # attendu : 401
-curl -s -i -m 5 --noproxy '*' $W http://127.0.0.1:14500/user/e55696/devx/ssh | head -1     # 403 Xpra = le préfixe
+curl -s -i -m 5 --noproxy '*' $W http://127.0.0.1:14500/user/userid/devx/ssh | head -1     # 403 Xpra = le préfixe
 ```
 
 ### Étape 2 : depuis ton poste, qui répond ?
@@ -120,7 +120,7 @@ presse-papiers. Colle-le dans `~/devx.token` sur ton poste.
 **Git Bash / Linux / macOS :**
 
 ```bash
-for U in https://myenv.corp/user/e55696/devx/ssh https://myenv.corp/user/e55696/https/14500/devx/ssh; do
+for U in https://myenv.corp/user/userid/devx/ssh https://myenv.corp/user/userid/https/14500/devx/ssh; do
   echo "== $U"
   curl -s -i -m 10 --http1.1 -H "Connection: Upgrade" -H "Upgrade: websocket" -H "Sec-WebSocket-Version: 13" \
        -H "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==" -H "Authorization: Bearer $(cat ~/devx.token)" "$U" \
@@ -132,7 +132,7 @@ done
 
 ```powershell
 $t = (Get-Content "$HOME\devx.token" -TotalCount 1).Trim()
-foreach ($u in 'https://myenv.corp/user/e55696/devx/ssh','https://myenv.corp/user/e55696/https/14500/devx/ssh') {
+foreach ($u in 'https://myenv.corp/user/userid/devx/ssh','https://myenv.corp/user/userid/https/14500/devx/ssh') {
   "== $u"
   curl.exe -s -i -m 10 --http1.1 -H "Connection: Upgrade" -H "Upgrade: websocket" -H "Sec-WebSocket-Version: 13" `
     -H "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==" -H "Authorization: Bearer $t" $u | Select-Object -First 12
@@ -160,7 +160,7 @@ Fichier `~/.devx/ssh/<NOM>.json` sur ton poste (le jeton est dans `<NOM>.token`,
 ```json
 {
   "name": "myenv",
-  "url": "https://myenv.corp/user/e55696",
+  "url": "https://myenv.corp/user/userid",
   "path": "/devx/ssh",
   "user": "dev",
   "folder": "/home/dev/workspace",
@@ -168,7 +168,7 @@ Fichier `~/.devx/ssh/<NOM>.json` sur ton poste (le jeton est dans `<NOM>.token`,
 }
 ```
 
-- `url` peut porter le préfixe : l'extension appelle `url` + `path`, soit `/user/e55696/devx/ssh`.
+- `url` peut porter le préfixe : l'extension appelle `url` + `path`, soit `/user/userid/devx/ssh`.
 - `tokenHeader` n'est utile que si un proxy garde l'en-tête `Authorization` pour lui. Sinon, retire la ligne.
 
 Puis, dans un terminal du poste :
