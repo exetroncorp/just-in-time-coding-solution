@@ -1,0 +1,816 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Bob face au marché</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=DM+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout: one reading column, with tables and charts allowed the full width. Evidence tags (Mesuré, Public, Estimé) are the page's one recurring device. */
+:root {
+  --bg: #f4f6f9; --surface: #ffffff; --ink: #0f1a2b; --ink2: #3d4a60; --muted: #5f6c82; --line: #d9e0e8; --axis: #aab5c3;
+  --accent: #1a5bb8; --bob: #2a78d6; --claude: #eb6834; --glm: #1baf7a; --other: #8a96a8;
+  --band: rgba(42, 120, 214, .11); --wash: rgba(15, 26, 43, .055);
+  --seg1: #1f2e45; --seg2: #66778f; --seg3: #b5c0ce; --seg1-ink: #ffffff; --seg2-ink: #ffffff; --seg3-ink: #0f1a2b;
+  --display: "Archivo", "Segoe UI", system-ui, sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "DM Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1319; --surface: #171c24; --ink: #eef2f7; --ink2: #c4ccd8; --muted: #9aa6b6; --line: #2a323d; --axis: #465162;
+    --accent: #7fb3f3; --bob: #3987e5; --claude: #d95926; --glm: #199e70; --other: #6e7a8b;
+    --band: rgba(57, 135, 229, .17); --wash: rgba(238, 242, 247, .06);
+    --seg1: #d3dbe6; --seg2: #8797ae; --seg3: #4b586b; --seg1-ink: #0f1319; --seg2-ink: #0f1319; --seg3-ink: #eef2f7;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1319; --surface: #171c24; --ink: #eef2f7; --ink2: #c4ccd8; --muted: #9aa6b6; --line: #2a323d; --axis: #465162;
+  --accent: #7fb3f3; --bob: #3987e5; --claude: #d95926; --glm: #199e70; --other: #6e7a8b;
+  --band: rgba(57, 135, 229, .17); --wash: rgba(238, 242, 247, .06);
+  --seg1: #d3dbe6; --seg2: #8797ae; --seg3: #4b586b; --seg1-ink: #0f1319; --seg2-ink: #0f1319; --seg3-ink: #eef2f7;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.55; }
+.page { max-width: 1080px; margin: 0 auto; padding-block: 40px 88px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 68px; }
+section { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2.5rem, 7vw, 4.4rem); font-weight: 800; line-height: 1.02; letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; }
+h3 { font-size: 1.08rem; font-weight: 700; line-height: 1.3; }
+p { margin: 0; }
+.prose { max-width: 68ch; display: flex; flex-direction: column; gap: 12px; }
+.lead { font-size: 1.22rem; line-height: 1.45; }
+.small { font-size: .9rem; color: var(--muted); }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+code { font-family: var(--mono); font-size: .86em; }
+.eyebrow { font-family: var(--mono); font-size: .8rem; letter-spacing: .04em; color: var(--muted); }
+.ev { display: inline-block; font-family: var(--mono); font-size: .68rem; line-height: 1; letter-spacing: .03em; padding: 4px 6px 3px; border-radius: 3px; white-space: nowrap; vertical-align: 1px; }
+.ev.m { background: var(--ink); color: var(--bg); border: 1px solid var(--ink); }
+.ev.p { border: 1px solid var(--axis); color: var(--ink2); }
+.ev.e { border: 1px dashed var(--muted); color: var(--ink2); }
+.head-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 14px; }
+
+/* hero */
+.hero { display: flex; flex-direction: column; gap: 22px; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 32px 44px; align-items: start; }
+.hero-text { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.terms { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 0; border-top: 1px solid var(--axis); }
+.terms > div { display: contents; }
+.terms dt, .terms dd { margin: 0; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.terms dt { font-family: var(--display); font-weight: 700; font-size: 1.32rem; white-space: nowrap; padding-right: 18px; }
+.terms dd { color: var(--ink2); font-size: .98rem; }
+.terms dd strong { color: var(--ink); }
+.chart-title { font-family: var(--display); font-weight: 700; font-size: 1rem; line-height: 1.3; }
+.chart-note { font-size: .88rem; color: var(--muted); }
+.chart { width: 100%; min-width: 0; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; touch-action: pan-y; }
+.chart text { font-family: var(--body); fill: var(--ink); }
+.chart .tick { font-size: 12px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.figure { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.keys { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: .9rem; color: var(--ink2); }
+.keys span.k { display: inline-flex; align-items: center; gap: 7px; }
+.swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
+.bg-bob { background: var(--bob); } .bg-claude { background: var(--claude); } .bg-glm { background: var(--glm); } .bg-other { background: var(--other); }
+
+/* tables */
+.scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; font-size: .96rem; }
+th, td { text-align: left; padding: 9px 12px 9px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+thead th { font-family: var(--display); font-size: .86rem; font-weight: 700; border-bottom: 1px solid var(--axis); vertical-align: bottom; }
+tbody th { font-weight: 600; }
+td.n, th.n { font-variant-numeric: tabular-nums; }
+.wide { min-width: 760px; }
+.mid { min-width: 620px; }
+.best { font-weight: 700; }
+
+details { font-size: .92rem; color: var(--ink2); }
+summary { cursor: pointer; color: var(--accent); width: fit-content; }
+details table { margin-top: 8px; font-size: .9rem; }
+
+/* bars and segments */
+.bars { display: flex; flex-direction: column; gap: 1px; }
+.bar-row { display: grid; grid-template-columns: 232px minmax(0, 1fr); align-items: center; gap: 0 12px; padding: 4px 0; border-radius: 3px; }
+.bar-row:hover, .bar-row:focus-visible { background: var(--wash); }
+.bar-name { font-size: .93rem; line-height: 1.2; min-width: 0; }
+.bar-name.is-bob { font-weight: 700; }
+.bar-track { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.bar { height: 14px; border-radius: 0 4px 4px 0; flex: none; min-width: 2px; }
+.bar-val { font-size: .88rem; font-variant-numeric: tabular-nums; color: var(--ink2); white-space: nowrap; }
+.segments { display: grid; gap: 10px; }
+.seg-row { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 4px 12px; align-items: center; }
+.seg-name { font-size: .93rem; line-height: 1.2; }
+.seg-bar { display: flex; gap: 2px; height: 28px; }
+.seg { height: 28px; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: .85rem; font-weight: 600; min-width: 2px; }
+
+/* simulator */
+.sim { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 22px; }
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px 24px; }
+.ctl { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.ctl label { font-size: .92rem; font-weight: 600; display: flex; justify-content: space-between; gap: 10px; }
+.ctl output { font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; }
+.ctl input[type=range] { width: 100%; accent-color: var(--bob); margin: 4px 0 0; }
+.ctl .hint { font-size: .8rem; color: var(--muted); line-height: 1.3; }
+.ctl-check { font-size: .92rem; display: flex; gap: 8px; align-items: flex-start; }
+.ctl-check input { margin-top: 5px; accent-color: var(--bob); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 18px 24px; }
+.tile { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.tile .lab { font-size: .88rem; color: var(--ink2); line-height: 1.25; }
+.tile .val { font-family: var(--display); font-weight: 700; font-size: 1.7rem; line-height: 1.1; }
+.tile .sub { font-size: .86rem; color: var(--muted); }
+
+/* pros and cons */
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 40px; }
+.two > div { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+ul.plain, ol.plain { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+ul.plain li, ol.plain li { line-height: 1.42; }
+ul.plain .ev { margin-right: 6px; }
+ol.num { margin: 0; padding-left: 1.5em; display: flex; flex-direction: column; gap: 9px; max-width: 76ch; }
+ol.num li::marker { font-family: var(--display); font-weight: 700; color: var(--muted); }
+.sources { columns: 2 320px; column-gap: 40px; font-size: .92rem; margin: 0; padding: 0; list-style: none; }
+.sources li { break-inside: avoid; padding: 3px 0; line-height: 1.35; }
+
+.tip { position: fixed; z-index: 20; pointer-events: none; background: var(--surface); color: var(--ink); border: 1px solid var(--axis); border-radius: 6px; padding: 8px 10px; font-size: .84rem; line-height: 1.35; max-width: 300px; box-shadow: 0 4px 16px rgba(15, 26, 43, .16); }
+.tip .t { color: var(--muted); margin-bottom: 4px; }
+.tip .r { display: grid; grid-template-columns: 14px auto 1fr; gap: 0 7px; align-items: center; }
+.tip .r b { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tip .r i { font-style: normal; color: var(--ink2); }
+.tip .ln { width: 14px; height: 0; border-top: 2px solid; }
+
+@media (max-width: 860px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr); }
+  .two { grid-template-columns: minmax(0, 1fr); }
+  .bar-row { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .seg-row { grid-template-columns: minmax(0, 1fr); }
+}
+</style>
+
+<main class="page">
+
+<header class="hero">
+  <p class="eyebrow">Dossier de négociation · IBM Bob · 5 novembre 2026</p>
+  <h1>Bob face au marché</h1>
+  <div class="hero-grid">
+    <div class="hero-text">
+      <p class="lead">Mesuré sur nos 19 tâches, Claude Code fait mieux que Bob pour bien moins cher. Avec Sonnet 5.5, il obtient 0,9995 de reward contre 0,986, en 2,6 fois moins de temps, pour 4,15 $ au tarif API, contre 27,70 $ chez Bob au prix de liste.</p>
+      <dl class="terms">
+        <div><dt>0,50 $</dt><dd>Prix de liste du Bobcoin en pack Enterprise, plus une licence par poste d'environ 20 $ par mois</dd></div>
+        <div><dt>0,075 $</dt><dd><strong>Ouverture.</strong> À ce prix, Bob coûte autant que Claude Code avec Sonnet 5.5 sur nos tâches</dd></div>
+        <div><dt>0,20 $</dt><dd><strong>Cible.</strong> Le prix qu'IBM pratique déjà sur son forfait Ultra</dd></div>
+        <div><dt>0,28 $</dt><dd><strong>À ne pas dépasser.</strong> À ce prix, Bob coûte autant que Claude Code avec Opus 5.5, qui fait mieux que lui</dd></div>
+      </dl>
+      <div class="prose">
+        <p><strong>Ce que le bench prouve.</strong> Sur 19 tâches identiques, Claude Code réussit les 19 avec Sonnet 5.5, Opus 5.5 et même Haiku 5.5, le plus petit, pour 1,05 $. Bob IDE en réussit 17, Bob Shell 15 et GLM gratuit 18, sur leur dernier essai.</p>
+        <p><strong>Ce qu'il ne prouve pas.</strong> Copilot, Cursor et Codex n'ont pas tourné sur ce bench. Claude Code n'a fait qu'un essai par tâche, sur une seule soirée, et rien n'a été testé sur IBM i ou IBM Z.</p>
+        <p><strong>Le levier principal.</strong> Bob consomme 6,9 fois plus de jetons que Claude Code avec Sonnet 5.5 pour les mêmes tâches, et facture au prix plein les relectures de cache, qui en font 94 %.</p>
+      </div>
+      <p class="small"><span class="ev m">Mesuré</span> notre bench. <span class="ev p">Public</span> page d'un éditeur ou presse, lue le 5 novembre 2026. <span class="ev e">Estimé</span> notre calcul à partir des deux. Cette page est rédigée par Claude, un modèle d'Anthropic : la comparaison avec Claude est celle où un biais est le plus plausible, et chaque chiffre y est sourcé.</p>
+    </div>
+    <figure class="figure" style="margin:0">
+      <div class="head-row"><span class="chart-title">L'échelle du Bobcoin</span><span class="ev e">Estimé</span></div>
+      <p class="chart-note">Prix de 1 Bobcoin, soit 500 000 jetons. À gauche, les tarifs d'IBM. À droite, le même mélange de jetons aux tarifs publics des modèles, et les deux points « mesuré » : le prix du Bobcoin auquel Bob IDE coûterait autant que Claude Code sur nos 19 tâches.</p>
+      <div class="chart" id="ladder" role="img" aria-label="Échelle de prix du Bobcoin. IBM : dépassement 0,55 dollar, Enterprise 0,50, Pro 0,40, Pro plus 0,33, Ultra 0,20. Parité mesurée avec Claude Code : Opus 5.5 0,28, Sonnet 5.5 0,07. Même mélange de jetons : Claude Opus 4.8 0,53, Claude Opus 5.5 0,33, Claude Sonnet 5 0,21, GLM-5.3 0,18, Claude Sonnet 5.5 0,17, GPT-6.1 Sol 0,16, GLM-5.3-Flash 0,02. Zone à négocier de 0,08 à 0,28."></div>
+    </figure>
+  </div>
+</header>
+
+<section id="bench">
+  <div class="head-row"><h2>Ce que notre bench mesure</h2><span class="ev m">Mesuré</span></div>
+  <p class="prose">Mêmes tâches, mêmes tests cachés, même bureau Linux à 4 processeurs. Bob a tourné du 29 octobre au 4 novembre, GLM les 4 et 5 novembre sur le service gratuit d'OpenCode. Un à trois essais par tâche : ce sont des tendances, pas des mesures fines.</p>
+  <div class="scroll"><table class="mid">
+    <thead><tr><th></th><th><span class="dot bg-claude"></span>Claude Code, Sonnet 5.5</th><th><span class="dot bg-claude"></span>Claude Code, Opus 5.5</th><th><span class="dot bg-claude"></span>Claude Code, Haiku 5.5</th><th><span class="dot bg-bob"></span>Bob IDE 2.3.0</th><th><span class="dot bg-bob"></span>Bob Shell 2.0.7 et 2.0.9</th><th><span class="dot bg-glm"></span>GLM-5.3-Flash, OpenCode</th></tr></thead>
+    <tbody>
+      <tr><th>Reward moyenne, 19 tâches</th><td class="n best">0,9995</td><td class="n best">0,9994</td><td class="n best">1,0</td><td class="n">0,986</td><td class="n">0,966</td><td class="n">0,920</td></tr>
+      <tr><th>Tâches à 0,99 ou plus, dernier essai</th><td class="n best">19 sur 19</td><td class="n best">19 sur 19</td><td class="n best">19 sur 19</td><td class="n">17 sur 19</td><td class="n">15 sur 19</td><td class="n">18 sur 19</td></tr>
+      <tr><th>Durée cumulée des 19 tâches</th><td class="n best">1 612 s</td><td class="n">3 788 s</td><td class="n">3 806 s</td><td class="n">4 228 s</td><td class="n">3 938 s</td><td class="n">7 851 s</td></tr>
+      <tr><th>Durée médiane d'une tâche</th><td class="n best">71 s</td><td class="n">170 s</td><td class="n">162 s</td><td class="n">185 s</td><td class="n">143 s</td><td class="n">372 s</td></tr>
+      <tr><th>Premier jeton, médiane</th><td class="n">non mesuré</td><td class="n">non mesuré</td><td class="n">non mesuré</td><td class="n best">1,2 s</td><td class="n best">1,2 s</td><td class="n">3,8 s (1,2 à 11,4 s)</td></tr>
+      <tr><th>Jetons consommés, 19 tâches</th><td class="n best">4,0 M</td><td class="n">9,9 M</td><td class="n">18,2 M</td><td class="n">27,7 M</td><td class="n">26,8 M</td><td class="n">non comparé</td></tr>
+      <tr><th>Prix des 19 tâches</th><td class="n">4,15 $ au tarif API</td><td class="n">15,35 $ au tarif API</td><td class="n">1,05 $ au tarif API</td><td class="n">27,70 $ au prix de liste</td><td class="n">26,79 $ au prix de liste</td><td class="n best">1,00 $, tarif public de la version payante</td></tr>
+      <tr><th>Même prix au tarif Ultra</th><td class="n">sans objet</td><td class="n">sans objet</td><td class="n">sans objet</td><td class="n">11,08 $</td><td class="n">10,72 $</td><td class="n">sans objet</td></tr>
+      <tr><th>Essais comptés</th><td class="n">19</td><td class="n">19</td><td class="n">19</td><td class="n">20</td><td class="n">29</td><td class="n">22</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="max-width:68ch">Claude Code 2.1.318 a tourné le 5 novembre 2026 sur le forfait Max de l'utilisateur, un essai par tâche. Son prix est l'estimation de l'outil au tarif public de l'API, pas une facture. Un essai de Sonnet 5.5 sur <code>url-shortener</code> a été perdu par le bench : l'agent a arrêté son serveur avec <code>pkill -f url-shortener</code>, ce qui a aussi tué le bench. Le défaut a été corrigé et l'essai refait.</p>
+  <figure class="figure" style="margin:0">
+    <p class="chart-title">Tâches réussies selon le temps accordé à chaque tâche</p>
+    <p class="chart-note">Réussie : reward de 0,99 ou plus. Une tâche à plusieurs essais compte pour 1, et chaque essai pèse sa part.</p>
+    <div class="keys" id="curve-keys"></div>
+    <div class="chart" id="curve" role="img" aria-label="Courbes cumulées. Claude Code avec Sonnet 5.5 réussit ses 19 tâches en moins de 5 minutes chacune. Avec Opus 5.5, il atteint 19 en 12 minutes. Bob IDE plafonne à 17, Bob Shell à 15,5, GLM rejoint 17 au bout de 23 minutes."></div>
+    <details><summary>Voir les valeurs</summary><div class="scroll"><table id="curve-table"></table></div></details>
+  </figure>
+  <div class="prose">
+    <p>En 2 minutes par tâche, Claude Code avec Sonnet 5.5 réussit déjà la plupart des tâches, et toutes en moins de 5 minutes. Bob réussit 14 tâches en 5 minutes, puis plafonne à 17 pour l'IDE et 15,5 pour Shell. Opus 5.5 est plus lent que Sonnet 5.5, mais finit lui aussi les 19. Face à GLM gratuit, l'avantage de Bob tient surtout à la vitesse : au bout de 23 minutes, GLM rejoint Bob IDE à 17.</p>
+    <p class="small">Sur d'autres campagnes du même bench, donc d'autres tâches et d'autres machines : le modèle gratuit anonyme <code>space-bunny-free</code> obtient 0,91 de reward sur 45 essais, et Qwen 3.8 en local 0,26 sur 31 essais. <a href="https://claude.ai/artifact/KRSQDGBM7ymopC82WTAzNp">Rapport Bob contre GLM</a> et <a href="https://claude.ai/artifact/59Qfx4qtWy99F8XnVKpaLQ">historique des versions de Bob</a> pour le détail par tâche.</p>
+  </div>
+</section>
+
+<section id="claude">
+  <div class="head-row"><h2>Bob face à Claude</h2><span class="ev p">Public</span><span class="ev e">Estimé</span></div>
+  <p class="prose">Les deux offres Enterprise ont la même forme : un poste à environ 20 $ par mois, sans consommation incluse, plus la consommation. Tout se joue donc sur le prix de la consommation et sur ce qui l'entoure.</p>
+  <div class="scroll"><table class="wide">
+    <thead><tr><th></th><th><span class="dot bg-bob"></span>IBM Bob Enterprise</th><th><span class="dot bg-claude"></span>Claude Enterprise, avec Claude Code</th></tr></thead>
+    <tbody>
+      <tr><th>Poste, par mois</th><td>20 $ d'après IT Jungle. Environ 17 $ selon nos informations, sans source écrite. IBM ne publie rien</td><td>20 $, facturé à l'année, 20 postes minimum</td></tr>
+      <tr><th>Support</th><td>15 % en plus d'après IT Jungle, à vérifier dans le devis</td><td>Non vérifié</td></tr>
+      <tr><th>1 million de jetons, mélange de Bob</th><td class="best">1,00 $ en pack, 1,10 $ en dépassement</td><td class="best">0,33 $ sur Sonnet 5.5, 0,66 $ sur Opus 5.5, au tarif public</td></tr>
+      <tr><th>Relecture de cache</th><td>Même prix que le reste, d'après nos 69 essais</td><td>5 % du prix de l'entrée sur Sonnet 5.5 et Opus 5.5</td></tr>
+      <tr><th>Crédits non utilisés</th><td>Les packs expirent 1 an après l'achat</td><td>Facturation à l'usage, ou crédits prépayés en libre-service</td></tr>
+      <tr><th>Choix du modèle</th><td>Impossible, et impossible de restreindre (FAQ IBM)</td><td>Au choix, le coût dépend du modèle</td></tr>
+      <tr><th>Modèle réel</th><td>Non nommé par IBM : alias <code>premium-ide</code>. AWS écrit que Bob utilise des modèles Anthropic sur Bedrock, et nos journaux portent 438 identifiants d'appels au format Bedrock</td><td>Nommé</td></tr>
+      <tr><th>Déploiement isolé</th><td class="best">SaaS, ou auto-hébergé sur OpenShift, air-gap possible, modèle fourni par le client</td><td>SaaS, ou Bedrock, Vertex, Foundry. Pas d'offre auto-hébergée trouvée</td></tr>
+      <tr><th>Administration</th><td>Pool partagé, limites par équipe et par personne, SSO. SCIM et journaux d'audit non trouvés</td><td class="best">SSO, SCIM, journaux d'audit, API de conformité, limites de dépense</td></tr>
+      <tr><th>Garantie de propriété intellectuelle</th><td>Oui en Enterprise, pas sur Pro, Pro+ ni Ultra</td><td>Non vérifié</td></tr>
+      <tr><th>Données</th><td>Pas d'entraînement, mémoire éphémère d'après la FAQ IBM</td><td>Rétention nulle sur comptes qualifiés, à demander</td></tr>
+      <tr><th>Certifications</th><td>ISO 27001 cité. SOC 2 non cité, documents sous NDA</td><td>SOC 2 Type II et ISO 27001 d'après des sources secondaires, non vérifiés</td></tr>
+      <tr><th>Coût moyen publié</th><td>Rien</td><td>150 à 250 $ par développeur et par mois, environ 13 $ par jour actif</td></tr>
+      <tr><th>Vitesse sur notre bench</th><td>143 à 185 s de médiane par tâche, premier jeton en 1,2 s</td><td class="best">71 s de médiane avec Sonnet 5.5, 170 s avec Opus 5.5. Premier jeton non mesuré</td></tr>
+      <tr><th>Gartner, mai 2026</th><td>IBM absent des leaders (source secondaire). 4,3 sur 5 pour 6 avis</td><td class="best">Anthropic parmi les leaders (source secondaire). 4,7 sur 5 pour 103 avis</td></tr>
+      <tr><th>Stack Overflow 2026</th><td>Bob non cité</td><td class="best">Claude Code cité à 66 % comme agent de choix</td></tr>
+      <tr><th>Essais sur notre bench</th><td>49 essais sur 19 tâches</td><td>57 essais sur les mêmes 19 tâches, Sonnet 5.5, Opus 5.5 et Haiku 5.5</td></tr>
+      <tr><th>Reward mesurée</th><td>0,986 pour l'IDE, 0,966 pour Shell</td><td class="best">0,9995 avec Sonnet 5.5, 0,9994 avec Opus 5.5, 1,0 avec Haiku 5.5</td></tr>
+      <tr><th>Jetons pour les 19 tâches</th><td>27,7 M pour l'IDE</td><td class="best">4,0 M avec Sonnet 5.5, 9,9 M avec Opus 5.5, 18,2 M avec Haiku 5.5</td></tr>
+      <tr><th>Prix mesuré des 19 tâches</th><td>27,70 $ au prix de liste, 11,08 $ au prix Ultra</td><td class="best">4,15 $ avec Sonnet 5.5, 15,35 $ avec Opus 5.5, 1,05 $ avec Haiku 5.5, au tarif API</td></tr>
+    </tbody>
+  </table></div>
+  <div class="prose">
+    <p>L'écart de prix vient de deux causes qui s'additionnent : Bob facture chaque jeton plus cher, et il en consomme 6,9 fois plus que Claude Code avec Sonnet 5.5 pour faire le même travail. Si Bob tourne bien sur un modèle Claude, comme l'indiquent AWS et nos journaux, la différence vient de son agent, pas du modèle. IBM répondra sans doute qu'il route parfois vers un modèle plus cher : même face à Opus 5.5, Bob coûte 1,8 fois plus au prix de liste, pour un résultat moins bon.</p>
+  </div>
+</section>
+
+<section id="tokens">
+  <div class="head-row"><h2>Les mêmes jetons au prix du marché</h2><span class="ev e">Estimé</span></div>
+  <p class="prose">Nos 69 essais valides de Bob ont consommé 86,56 millions de jetons pour 173,12 Bobcoins, soit exactement 500 000 jetons par Bobcoin. Ce graphique applique les tarifs publics à ce mélange réel, en supposant le même nombre de jetons partout. C'est favorable à Bob : sur nos tâches, Claude Code en consomme 2,8 à 6,9 fois moins.</p>
+  <figure class="figure" style="margin:0">
+    <p class="chart-title">Prix de 1 million de jetons, mélange réel de Bob</p>
+    <div class="keys"><span class="k"><span class="swatch bg-bob"></span>Tarifs d'IBM</span><span class="k"><span class="swatch bg-claude"></span>Claude</span><span class="k"><span class="swatch bg-other"></span>Autres modèles</span></div>
+    <div class="bars" id="bars"></div>
+  </figure>
+  <figure class="figure" style="margin:0">
+    <p class="chart-title">Où part la facture</p>
+    <p class="chart-note">Le mélange de jetons est le même. Seule la façon de facturer change.</p>
+    <div class="keys"><span class="k"><span class="swatch" style="background:var(--seg1)"></span>Relecture de cache</span><span class="k"><span class="swatch" style="background:var(--seg2)"></span>Écriture de cache</span><span class="k"><span class="swatch" style="background:var(--seg3)"></span>Sortie</span></div>
+    <div class="segments" id="segments"></div>
+  </figure>
+  <div class="prose"><p>Facturer la relecture au prix plein est le cœur du problème : Bob renvoie tout le contexte à chaque appel, et son coût suit le nombre d'appels (corrélation de 0,98). Si IBM comptait les relectures à un poids réduit, la consommation chuterait d'autant :</p></div>
+  <div class="scroll"><table class="mid" style="max-width:720px">
+    <thead><tr><th>Poids d'une relecture de cache</th><th>Bobcoins en moins</th><th>Prix équivalent du Bobcoin, à 0,50 $ affiché</th></tr></thead>
+    <tbody id="cache-table"></tbody>
+  </table></div>
+</section>
+
+<section id="cost">
+  <div class="head-row"><h2>Le coût complet d'un développeur</h2><span class="ev e">Estimé</span></div>
+  <p class="prose">Licence par poste plus consommation. Réglez le prix négocié et le volume : les courbes, les totaux et le tableau de négociation suivent. Une tâche vaut une tâche moyenne du bench : 2,92 Bobcoins, soit 1,46 million de jetons et un peu moins de 4 minutes d'agent. 100 tâches par mois font 5 par jour ouvré.</p>
+  <div class="sim">
+    <div class="controls">
+      <div class="ctl"><label for="s-price">Bobcoin négocié <output id="o-price" for="s-price"></output></label><input type="range" id="s-price" min="0.05" max="0.6" step="0.01" value="0.25"><span class="hint">Liste 0,50 $. Ultra 0,20 $</span></div>
+      <div class="ctl"><label for="s-seat">Licence par poste, par mois <output id="o-seat" for="s-seat"></output></label><input type="range" id="s-seat" min="0" max="40" step="1" value="20"><span class="hint">20 $ chez IT Jungle. Mettez 17 $ si le devis le confirme</span></div>
+      <div class="ctl"><label for="s-cache">Poids des relectures de cache <output id="o-cache" for="s-cache"></output></label><input type="range" id="s-cache" min="10" max="100" step="5" value="100"><span class="hint">100 % aujourd'hui. S'applique au prix négocié</span></div>
+      <div class="ctl"><label for="s-tasks">Tâches par mois et par développeur <output id="o-tasks" for="s-tasks"></output></label><input type="range" id="s-tasks" min="10" max="400" step="10" value="100"></div>
+      <div class="ctl"><label for="s-coins">Bobcoins par tâche <output id="o-coins" for="s-coins"></output></label><input type="range" id="s-coins" min="0.5" max="6" step="0.01" value="2.92"><span class="hint">2,92 en moyenne sur 19 tâches. Médiane d'un essai : 1,60</span></div>
+      <div class="ctl"><label for="s-devs">Développeurs <output id="o-devs" for="s-devs"></output></label><input type="range" id="s-devs" min="10" max="1000" step="10" value="100"></div>
+      <label class="ctl-check" for="s-support"><input type="checkbox" id="s-support"><span>Ajouter 15 % de support sur les Bobcoins, d'après IT Jungle</span></label>
+    </div>
+    <div class="tiles" id="tiles"></div>
+    <figure class="figure" style="margin:0">
+      <p class="chart-title">Coût par développeur et par mois, selon le volume</p>
+      <div class="keys" id="cost-keys"></div>
+      <div class="chart" id="costchart" role="img" aria-label="Coût mensuel par développeur en fonction du nombre de tâches. La courbe de Bob au prix de liste monte le plus vite. Les valeurs sont dans le tableau sous le graphique."></div>
+      <details><summary>Voir les valeurs</summary><div class="scroll"><table id="cost-table" class="mid"></table></div></details>
+    </figure>
+  </div>
+  <p class="prose small">Les courbes de Claude utilisent leur prix mesuré sur nos 19 tâches, au tarif API : 0,22 $ par tâche avec Sonnet 5.5, 0,81 $ avec Opus 5.5. Bob Ultra suppose les jetons de Bob. GLM utilise ses jetons mesurés, au tarif public de sa version payante, sans poste. Repères publics : Anthropic donne 150 à 250 $ par développeur et par mois en moyenne, et Gartner relève que 23 % des responsables techniques dépensent 200 à 500 $ (chiffre lu dans la presse). Les forfaits à limites non chiffrées en jetons restent hors courbe : Claude Max à 100 $, Claude Ultra à 200 $, Cursor Ultra à 200 $, Codex Pro de 100 à 500 $.</p>
+</section>
+
+<section id="market">
+  <div class="head-row"><h2>Le marché en un tableau</h2><span class="ev p">Public</span></div>
+  <div class="scroll"><table class="wide">
+    <thead><tr><th>Produit</th><th>Poste, par mois</th><th>Compris dans le poste</th><th>Au-delà</th><th>Relecture de cache</th><th>Choix du modèle</th><th>Auto-hébergé</th><th>Sur notre bench</th></tr></thead>
+    <tbody>
+      <tr><th><span class="dot bg-bob"></span>IBM Bob Enterprise</th><td>Environ 20 $, non publié</td><td>Rien</td><td>0,50 $ le Bobcoin, 0,55 $ en dépassement</td><td>Plein tarif</td><td>Non</td><td>Oui, air-gap possible</td><td>Oui</td></tr>
+      <tr><th><span class="dot bg-claude"></span>Claude Enterprise</th><td>20 $ à l'année, 20 postes minimum</td><td>Rien</td><td>Tarif API</td><td>2,5 à 10 % de l'entrée, selon le modèle</td><td>Oui</td><td>Non, mais Bedrock, Vertex, Foundry</td><td>Oui, Claude Code</td></tr>
+      <tr><th>GitHub Copilot Business</th><td>19 $</td><td>1 900 crédits, soit 19 $</td><td>0,01 $ le crédit, selon le modèle et le type de jeton</td><td>Comptée à part, taux par modèle</td><td>Oui, selon le forfait</td><td>Non vérifié</td><td>Non</td></tr>
+      <tr><th>GitHub Copilot Enterprise</th><td>39 $</td><td>3 900 crédits, soit 39 $</td><td>Même règle</td><td>Même règle</td><td>Oui, selon le forfait</td><td>Non vérifié</td><td>Non</td></tr>
+      <tr><th>Cursor Teams</th><td>30, 100 ou 200 $</td><td>Usage des modèles de Cursor</td><td>Modèles tiers au tarif API, plus 0,25 $ le million</td><td>Tarif publié par modèle</td><td>Oui</td><td>Non vérifié</td><td>Non</td></tr>
+      <tr><th>OpenAI Codex, ChatGPT Business</th><td>20 $ à l'année, 25 $ au mois</td><td>Messages limités par tranche de 5 h</td><td>Crédits par million de jetons</td><td>Tarif publié, environ 5 à 10 % de l'entrée</td><td>Oui, modèles OpenAI</td><td>Non vérifié</td><td>Non</td></tr>
+      <tr><th>Amazon Kiro Teams</th><td>20 $</td><td>500 crédits en commun</td><td>0,04 $ le crédit</td><td>Non publié</td><td>Oui, crédits selon le modèle</td><td>Non vérifié</td><td>Non</td></tr>
+      <tr><th>Tabnine</th><td>Non publié depuis son rachat par Tricentis</td><td>Non publié</td><td>Non publié</td><td>Non publié</td><td>Non vérifié</td><td>Oui, air-gap annoncé</td><td>Non</td></tr>
+      <tr><th><span class="dot bg-glm"></span>OpenCode et GLM-5.3-Flash</th><td>0 $</td><td>Sans objet</td><td>0,15 $ en entrée, 0,50 $ en sortie, par million</td><td>0,03 $, soit 20 % de l'entrée</td><td>Oui, client libre</td><td>Client seulement</td><td>Oui, version gratuite</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small prose">Prix relevés le 5 novembre 2026. Écartés faute de source fiable lue : Windsurf (sa page renvoie désormais vers Devin), JetBrains, Gemini Code Assist et Antigravity. La mention Non vérifié signifie que nous n'avons pas lu de page officielle sur ce point.</p>
+
+  <h3>Où se place Bob</h3>
+  <div class="scroll"><table class="wide">
+    <thead><tr><th>Critère</th><th>Place de Bob</th><th>Sur quoi repose ce classement</th><th>Preuve</th></tr></thead>
+    <tbody>
+      <tr><th>Qualité sur notre bench</th><td>4e sur 6, avec Bob IDE</td><td>0,986, derrière Claude Code avec Haiku 5.5 (1,0), Sonnet 5.5 (0,9995) et Opus 5.5 (0,9994), devant Bob Shell (0,966) et GLM (0,920)</td><td><span class="ev m">Mesuré</span></td></tr>
+      <tr><th>Vitesse sur notre bench</th><td>2e sur 6, avec Bob Shell</td><td>Médiane de 143 s, contre 71 s pour Claude Code avec Sonnet 5.5, 162 s avec Haiku 5.5, 170 s avec Opus 5.5, 185 s pour Bob IDE et 372 s pour GLM</td><td><span class="ev m">Mesuré</span></td></tr>
+      <tr><th>Prix des 19 tâches</th><td>Dernier sur 6 au prix de liste</td><td>27,70 $ pour Bob IDE, contre 15,35 $, 4,15 $ et 1,05 $ pour Claude Code et 1,00 $ pour GLM. Au prix Ultra, 11,08 $</td><td><span class="ev m">Mesuré</span></td></tr>
+      <tr><th>Jetons pour le même travail</th><td>Dernier sur 4</td><td>27,7 M pour Bob IDE, contre 18,2 M, 9,9 M et 4,0 M pour Claude Code</td><td><span class="ev m">Mesuré</span></td></tr>
+      <tr><th>Prix du jeton, tarif Enterprise</th><td>3e plus cher sur 16</td><td>1,00 $ le million. Seuls Claude Fable 5.1 et Opus 4.8 coûtent plus</td><td><span class="ev e">Estimé</span></td></tr>
+      <tr><th>Prix du jeton, tarif Ultra</th><td>7e plus cher sur 16</td><td>0,40 $ le million, au niveau de Sonnet 5 et Gemini 3.1 Pro</td><td><span class="ev e">Estimé</span></td></tr>
+      <tr><th>Remise sur le cache</th><td>Dernier</td><td>Aucune, alors qu'Anthropic, OpenAI, Google, Z.ai et DeepSeek en publient une</td><td><span class="ev m">Mesuré</span></td></tr>
+      <tr><th>Liberté de modèle</th><td>Dernier</td><td>La FAQ d'IBM dit qu'on ne peut ni choisir ni restreindre</td><td><span class="ev p">Public</span></td></tr>
+      <tr><th>Déploiement isolé</th><td>En tête</td><td>OpenShift et air-gap documentés par IBM. Tabnine l'annonce aussi, sans tarif public. Non vérifié ailleurs</td><td><span class="ev p">Public</span></td></tr>
+      <tr><th>IBM i et IBM Z</th><td>En tête</td><td>Packs dédiés, non vus chez les autres produits lus. Non testés sur notre bench</td><td><span class="ev p">Public</span></td></tr>
+      <tr><th>Administration</th><td>Milieu</td><td>Pool, limites, SSO. SCIM et journaux d'audit non trouvés, alors que Claude, Cursor et Codex les publient</td><td><span class="ev p">Public</span></td></tr>
+      <tr><th>Preuves indépendantes</th><td>Dernier</td><td>Aucun benchmark public de Bob. Le gain de 45 % vient des enquêtes d'IBM, sans méthode publiée</td><td><span class="ev p">Public</span></td></tr>
+      <tr><th>Adoption visible</th><td>Dernier</td><td>Non cité par Stack Overflow 2026, 6 avis Gartner contre 103 pour Claude Code</td><td><span class="ev p">Public</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="prose">
+    <p><strong>Notre classement dépend de votre besoin.</strong> Avec une contrainte de déploiement isolé, ou du code sur IBM i et IBM Z, Bob passe en tête et la négociation ne porte que sur le prix. Sans cette contrainte, Claude Code passe devant Bob sur nos mesures : meilleure reward, plus rapide avec Sonnet 5.5, et moins cher. Cursor, Copilot et Codex restent à mesurer. GLM-5.3-Flash reste le moins cher, pour environ 2 fois le temps de Bob.</p>
+  </div>
+</section>
+
+<section id="pros">
+  <h2>Avantages et défauts de Bob</h2>
+  <div class="two">
+    <div>
+      <h3>Avantages</h3>
+      <ul class="plain">
+        <li><span class="ev m">Mesuré</span>Résultats solides : Bob IDE fait 0,986 de reward sur 19 tâches, dont 17 à 0,99 ou plus, mieux que GLM gratuit et un peu moins bien que Claude Code.</li>
+        <li><span class="ev m">Mesuré</span>Rapide face à GLM : 143 à 185 s de médiane par tâche, premier jeton en 1,2 s. Claude Code avec Sonnet 5.5 reste 2 à 2,6 fois plus rapide.</li>
+        <li><span class="ev m">Mesuré</span>Facture lisible : 500 000 jetons par Bobcoin sur 69 essais, coût d'une même tâche à ± 25 % sur une même version.</li>
+        <li><span class="ev p">Public</span>SaaS en Europe (Francfort), ou auto-hébergé sur OpenShift avec air-gap.</li>
+        <li><span class="ev p">Public</span>Garantie de propriété intellectuelle en Enterprise, pas d'entraînement sur vos données, mémoire éphémère.</li>
+        <li><span class="ev p">Public</span>Pool de Bobcoins, limites par équipe et par personne, plafond de dépassement.</li>
+        <li><span class="ev p">Public</span>Packs IBM i, IBM Z, Java et DevSecOps, à tester sur vos propres applications.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Défauts</h3>
+      <ul class="plain">
+        <li><span class="ev m">Mesuré</span>Gourmand : 6,9 fois plus de jetons que Claude Code avec Sonnet 5.5 pour les mêmes 19 tâches, et 2,8 fois plus qu'avec Opus 5.5.</li>
+        <li><span class="ev m">Mesuré</span>Aucune remise sur le cache, alors que 94 % des jetons en sont des relectures.</li>
+        <li><span class="ev m">Mesuré</span>Bob IDE s'arrête sur toute commande hors de sa liste exacte, sans joker : 6 essais bloqués, dont un qui a perdu 9,94 Bobcoins.</li>
+        <li><span class="ev m">Mesuré</span>Bob Shell se fige sur un serveur lancé en arrière-plan : 37 minutes sur un essai, sans dépense.</li>
+        <li><span class="ev m">Mesuré</span>Résultats qui bougent d'une version à l'autre : <code>url-shortener</code> à 1,0 en 2.0.6, puis 0,41 et 0,90 en 2.0.7. <code>bola</code> à 0,58 en 2.0.9, avec les virements laissés sans protection, sur un seul essai.</li>
+        <li><span class="ev m">Mesuré</span>Environ un appel au modèle sur 6 ne sert qu'à la liste de tâches, soit près de 8 Bobcoins sur 46 pour Bob Shell 2.0.7.</li>
+        <li><span class="ev p">Public</span>Modèle non nommé, sans choix ni restriction possible.</li>
+        <li><span class="ev p">Public</span>Packs qui expirent après 1 an, dépassement 10 % plus cher et impossible à couper avant la fin du mois.</li>
+        <li><span class="ev p">Public</span>SOC 2 non cité, SCIM et journaux d'audit non trouvés, SLA renvoyé au contrat. La correction des failles signalées par PromptArmor en janvier n'est confirmée par aucune source lue.</li>
+        <li><span class="ev p">Public</span>Produit récent, disponible depuis avril 2026, sans mesure indépendante.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="nego">
+  <div class="head-row"><h2>Négocier avec IBM</h2><span class="ev e">Estimé</span></div>
+  <p class="prose">Deux ancres se mesurent. La première est dans le catalogue d'IBM : Ultra vend 1 000 Bobcoins 200 $, le pack Enterprise les vend 500 $. La seconde vient du bench : pour que nos 19 tâches coûtent autant chez Bob que chez Claude Code, le Bobcoin devrait valoir 0,075 $ face à Sonnet 5.5 et 0,28 $ face à Opus 5.5, qui font tous deux mieux que Bob.</p>
+  <div class="scroll"><table class="mid" style="max-width:860px">
+    <thead><tr><th>Position</th><th>Bobcoin</th><th>Baisse sur la liste</th><th>Pourquoi ce prix</th><th id="nego-head">Facture annuelle</th></tr></thead>
+    <tbody id="nego-table"></tbody>
+  </table></div>
+  <p class="small prose" id="nego-note"></p>
+
+  <h3>Ce qu'il faut demander, par ordre de valeur</h3>
+  <ol class="num">
+    <li><strong>Le Bobcoin au prix Ultra,</strong> ou au moins sous 0,28 $, la parité mesurée avec Claude Code et Opus 5.5.</li>
+    <li><strong>Ou les relectures de cache comptées à 50 %.</strong> À 0,50 $ affiché, cela donne 47 % de Bobcoins en moins, soit 0,26 $ d'équivalent. Les deux demandes se remplacent : ne les cumulez pas dans vos calculs.</li>
+    <li><strong>Un poste qui inclut sa valeur en Bobcoins,</strong> comme Copilot (1 900 crédits, soit 19 $, pour un poste à 19 $) et Kiro (500 crédits pour un poste à 20 $). Sinon, un poste à 0 $ contre un engagement de volume.</li>
+    <li><strong>Le support inclus.</strong> IT Jungle indique 15 % en plus : 3 $ sur 20 $, 9 $ sur 60 $, 30 $ sur 200 $, 75 $ sur 500 $. À 0,50 $, le Bobcoin passerait à 0,575 $.</li>
+    <li><strong>Le dépassement au prix du pack,</strong> sans les 10 % de plus, et le droit de le couper en cours de mois.</li>
+    <li><strong>Des Bobcoins valables 24 mois,</strong> ou le report du solde. Ils expirent aujourd'hui 1 an après l'achat.</li>
+    <li><strong>Le ratio écrit au contrat :</strong> 500 000 jetons par Bobcoin, avec protection du prix si le modèle ou le routage change. IBM ne publie aucun ratio. Sur 6 tâches, Bob Shell 2.0.7 a coûté 75 % de plus que 2.0.6, à cause de deux tâches.</li>
+    <li><strong>Le modèle nommé,</strong> avec le droit de le restreindre et un préavis en cas de changement.</li>
+    <li><strong>Les engagements de sécurité par écrit :</strong> SOC 2, SCIM, journaux d'audit, SLA, durée de rétention, correction des failles PromptArmor, prix de l'auto-hébergé.</li>
+    <li><strong>Une preuve de concept gratuite.</strong> La FAQ d'IBM en propose une. Demandez assez de Bobcoins pour repasser ce bench à côté de vos concurrents.</li>
+    <li><strong>Des correctifs datés et un avoir</strong> sur les essais perdus : liste d'approbation avec jokers pour Bob IDE, blocage sur serveur en arrière-plan pour Bob Shell, option pour réduire les appels <code>update_todo_list</code>.</li>
+  </ol>
+
+  <h3>Ce qu'IBM répondra</h3>
+  <div class="scroll"><table class="mid">
+    <thead><tr><th style="width:38%">IBM dira</th><th>Réponse</th></tr></thead>
+    <tbody>
+      <tr><td>Ultra est un forfait individuel, sans SSO ni garantie.</td><td>Le poste Enterprise paie ces fonctions. Pourquoi le même Bobcoin coûte-t-il 2,5 fois plus cher en plus du poste ?</td></tr>
+      <tr><td>Ultra est un prix d'appel, il ne couvre peut-être pas nos coûts.</td><td>Alors réduisez les jetons : Claude Code fait le même travail avec 6,9 fois moins. Nommez le modèle, montrez le routage, puis discutons de 0,20 à 0,28 $.</td></tr>
+      <tr><td>Le cache nous coûte aussi.</td><td>Oui, mais une relecture coûte 5 % du prix de l'entrée chez Anthropic sur Sonnet 5.5 et Opus 5.5, et 10 % chez Google.</td></tr>
+      <tr><td>Nous routons aussi vers des modèles coûteux.</td><td>Alors donnez la répartition. Sur notre mélange, Opus 5.5 revient à 0,66 $ le million et Opus 4.8 à 1,07 $. Nous ne pouvons pas payer un prix fixé sur un routage invisible.</td></tr>
+      <tr><td>Bob apporte 45 % de productivité.</td><td>Ce chiffre vient des enquêtes d'IBM, sans méthode publiée. METR juge les preuves d'accélération très faibles pour tout le secteur. Faisons une preuve de concept mesurée.</td></tr>
+      <tr><td>Bob est plus fiable et plus rapide.</td><td>Face à GLM gratuit, oui. Face à Claude Code, non : sur nos 19 tâches, Sonnet 5.5 fait 0,9995 en 71 s de médiane, contre 0,986 en 185 s pour Bob IDE.</td></tr>
+      <tr><td>L'auto-hébergement et la garantie ont de la valeur.</td><td>Oui, si nous en avons besoin. En auto-hébergé, le client fournit son modèle : le prix doit alors porter sur le poste et le support, sans marge sur les jetons.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Calendrier et repères</h3>
+  <ul class="plain prose">
+    <li><strong>30 novembre 2026.</strong> Fin de la promotion d'IBM, jusqu'à 20 % sur les abonnements annuels éligibles. Ce rabais public est un plancher.</li>
+    <li><strong>31 décembre 2026.</strong> Fin de l'exercice d'IBM. Des cabinets qui vendent ce conseil y voient le meilleur moment, ce qui reste un avis.</li>
+    <li><strong>Repères de remise.</strong> Pour Anthropic, médiane de 17 %, 9 % sous 250 000 $ et 29 % au-dessus de 5 millions, d'après un tiers. Pour IBM, 10 à 25 % sous 250 000 $ par an, d'après un cabinet et en 2020. Une baisse de 50 à 60 % sort de ces repères : elle ne tient que par le précédent Ultra et les tarifs publics.</li>
+    <li><strong>Votre alternative.</strong> Claude Enterprise à 20 $ le poste plus le tarif API, soit 4,15 $ avec Sonnet 5.5 pour nos 19 tâches, Copilot Business à 19 $ avec ses crédits, Cursor Teams à partir de 30 $. Attention : d'après la presse, la remise d'Anthropic s'arrête une fois les jetons du contrat consommés. Comparez aussi les prix après engagement.</li>
+  </ul>
+</section>
+
+<section id="next">
+  <h2>Ce qui reste à prouver</h2>
+  <ul class="plain prose">
+    <li><strong>Copilot, Cursor et Codex ne sont pas mesurés.</strong> Le bench sait noter un essai lancé à la main dans Cursor ou Copilot. Claude Code n'a fait qu'un essai par tâche, sur une seule soirée : un second passage dirait si l'écart avec Bob tient.</li>
+    <li><strong>Le devis d'IBM manque.</strong> Prix du poste, support et ratio de jetons restent à faire écrire. Nous n'avons trouvé ni la lettre d'annonce A26-0539, ni la Service Description.</li>
+    <li><strong>Même nombre de jetons, supposé.</strong> Les modèles récents d'Anthropic comptent environ 30 % de jetons de plus pour le même texte, d'après une note de ses tarifs relevée par notre recherche.</li>
+    <li><strong>Peu d'essais, tâches limitées.</strong> Un à trois essais par tâche, sur Spring, Flask et Angular. Rien sur IBM i, IBM Z ou le code ancien, où Bob joue sa différence. L'échec de Bob Shell 2.0.9 sur <code>bola</code> reste à refaire.</li>
+    <li><strong>Publier nos résultats.</strong> Nous n'avons pas trouvé les conditions d'utilisation de Bob. Vérifiez qu'elles n'interdisent pas de diffuser un benchmark avant de montrer ces chiffres hors de l'entreprise.</li>
+    <li><strong>Sources secondaires.</strong> La place de Gartner, les avis Peer Insights et le 23 % de Gartner viennent de la presse ou de résumés de recherche. À vérifier avant de les citer à IBM.</li>
+  </ul>
+</section>
+
+<section id="sources">
+  <h2>Sources</h2>
+  <ul class="sources">
+    <li><a href="https://bob.ibm.com/pricing">Tarifs de Bob</a>, <a href="https://www.ibm.com/products/ai-coding-agent/pricing">page IBM</a></li>
+    <li><a href="https://bob.ibm.com/docs/ide/account/bobcoins">Bobcoins, documentation IBM</a></li>
+    <li><a href="https://bob.ibm.com/docs/ide/faq">FAQ de Bob</a></li>
+    <li><a href="https://www.ibm.com/new/announcements/ibm-bob-expands-to-self-hosted-environments-for-sensitive-and-mission-critical-enterprise-software">IBM, auto-hébergement, 30 septembre 2026</a></li>
+    <li><a href="https://www.itjungle.com/2026/03/02/ibm-gets-bob-1-0-off-the-ground/">IT Jungle, mars 2026</a>, <a href="https://www.itjungle.com/2026/06/01/big-blue-unveils-bob-premium-pack-for-ibm-i/">juin 2026</a></li>
+    <li><a href="https://aws.amazon.com/blogs/ibm-redhat/aws-and-ibm-new-agentic-collaborations-showcased-at-ibm-think-2026/">AWS, 5 mai 2026</a></li>
+    <li><a href="https://www.theregister.com/2026/01/07/ibm_bob_vulnerability/">The Register, failles PromptArmor</a></li>
+    <li><a href="https://www.thestack.technology/ibm-bob-ai-coding-tool-dev-productivity/">The Stack, le chiffre de 45 %</a></li>
+    <li><a href="https://claude.com/pricing">Forfaits Claude</a>, <a href="https://platform.claude.com/docs/en/about-claude/pricing">tarifs de l'API</a></li>
+    <li><a href="https://code.claude.com/docs/en/costs">Claude Code, coûts moyens</a>, <a href="https://code.claude.com/docs/en/zero-data-retention">rétention nulle</a></li>
+    <li><a href="https://docs.github.com/en/copilot/concepts/billing/organizations-and-enterprises">GitHub Copilot, facturation</a></li>
+    <li><a href="https://cursor.com/pricing">Cursor, forfaits</a>, <a href="https://cursor.com/docs/account/pricing">tarifs par modèle</a></li>
+    <li><a href="https://learn.chatgpt.com/docs/pricing">OpenAI Codex</a>, <a href="https://developers.openai.com/api/docs/pricing">tarifs de l'API</a></li>
+    <li><a href="https://kiro.dev/pricing">Amazon Kiro</a></li>
+    <li><a href="https://www.tricentis.com/news/tricentis-acquires-tabnine">Tricentis et Tabnine</a></li>
+    <li><a href="https://aistudio.google.com/docs/pricing">Google Gemini</a>, <a href="https://docs.z.ai/guides/overview/pricing">Z.ai</a>, <a href="https://api-docs.deepseek.com/quick_start/pricing">DeepSeek</a>, <a href="https://platform.minimax.io/docs/guides/pricing-paygo">MiniMax</a></li>
+    <li><a href="https://www.sovereignmagazine.com/article/gartner-2026-magic-quadrant-enterprise-ai-coding-agents">Magic Quadrant Gartner 2026, source secondaire</a></li>
+    <li><a href="https://www.gartner.com/reviews/market/enterprise-ai-coding-agents/compare/product/claude-code-vs-ibm-bob">Gartner Peer Insights</a></li>
+    <li><a href="https://stackoverflow.blog/2026/10/06/the-results-of-the-2026-developer-survey-are-here/">Stack Overflow, enquête 2026</a></li>
+    <li><a href="https://metr.org/blog/2026-02-24-uplift-update/">METR, février 2026</a></li>
+    <li><a href="https://www.computerweekly.com/news/366645054/Gartner-AI-coding-agents-will-cost-more-than-real-developers">Computer Weekly, dépenses selon Gartner</a></li>
+    <li><a href="https://vendorbenchmark.com/price-check/anthropic">Vendor Benchmark, remises Anthropic</a></li>
+    <li><a href="https://atonementlicensing.com/blog/ibm-discount-benchmarks/">Atonement Licensing, remises IBM, 2020</a></li>
+    <li><a href="https://redresscompliance.com/ibm-ela-negotiation-timing-quarter-fiscal-year-leverage">Redress, calendrier IBM</a></li>
+    <li><a href="https://thenextweb.com/news/anthropic-openai-enterprise-discounts-tokens-the-information">TNW, remises après engagement</a></li>
+  </ul>
+  <p class="small">Calculs et notes : <code>tests/out/bob-market-analysis</code>, <code>research_notes/Bob face aux agents du marché</code> et <code>reports/Bob face aux agents du marché.md</code>. Les deux rapports du bench liés plus haut sont privés : partagez-les aussi si vous partagez cette page.</p>
+</section>
+
+</main>
+<div id="tip" class="tip" hidden></div>
+
+<script>
+const DATA = {"mix":{"read":0.9436132878160362,"write":0.04344935623061327,"plain":2.605114341992017e-05,"output":0.012911304809930626},"prices":[{"name":"Claude Fable 5.1","group":"claude","per_million":1.4248,"per_coin":0.7124,"enterprise_ratio":0.7,"ultra_ratio":0.28,"source":"platform.claude.com/docs/en/about-claude/pricing","prices":{"input":10,"read":0.25,"write":12.5,"output":50}},{"name":"Bob, pack de dépassement Enterprise","group":"bob","per_million":1.1,"per_coin":0.55},{"name":"Claude Opus 4.8","group":"claude","per_million":1.0663,"per_coin":0.5331,"enterprise_ratio":0.94,"ultra_ratio":0.38,"source":"platform.claude.com/docs/en/about-claude/pricing","prices":{"input":5,"read":0.5,"write":6.25,"output":25}},{"name":"Bob Enterprise, pack de 1 000","group":"bob","per_million":1.0,"per_coin":0.5},{"name":"Bob Pro, 20 $ pour 50","group":"bob","per_million":0.8,"per_coin":0.4},{"name":"Bob Pro+, 60 $ pour 180","group":"bob","per_million":0.6667,"per_coin":0.3333},{"name":"Claude Opus 5.5","group":"claude","per_million":0.6643,"per_coin":0.3321,"enterprise_ratio":1.51,"ultra_ratio":0.6,"source":"platform.claude.com/docs/en/about-claude/pricing","prices":{"input":4,"read":0.2,"write":5,"output":20}},{"name":"Gemini 3.1 Pro","group":"other","per_million":0.4306,"per_coin":0.2153,"enterprise_ratio":2.32,"ultra_ratio":0.93,"source":"aistudio.google.com/docs/pricing","prices":{"input":2,"read":0.2,"write":null,"output":12}},{"name":"Claude Sonnet 5","group":"claude","per_million":0.4265,"per_coin":0.2133,"enterprise_ratio":2.34,"ultra_ratio":0.94,"source":"platform.claude.com/docs/en/about-claude/pricing","prices":{"input":2,"read":0.2,"write":2.5,"output":10}},{"name":"GPT-5.3 Codex","group":"other","per_million":0.422,"per_coin":0.211,"enterprise_ratio":2.37,"ultra_ratio":0.95,"source":"developers.openai.com/api/docs/pricing","prices":{"input":1.75,"read":0.175,"write":null,"output":14}},{"name":"Bob Ultra, 200 $ pour 1 000","group":"bob","per_million":0.4,"per_coin":0.2},{"name":"GLM-5.3","group":"other","per_million":0.363,"per_coin":0.1815,"enterprise_ratio":2.75,"ultra_ratio":1.1,"source":"docs.z.ai/guides/overview/pricing","prices":{"input":1.4,"read":0.26,"write":null,"output":4.4}},{"name":"Claude Sonnet 5.5","group":"claude","per_million":0.3321,"per_coin":0.1661,"enterprise_ratio":3.01,"ultra_ratio":1.2,"source":"platform.claude.com/docs/en/about-claude/pricing","prices":{"input":2,"read":0.1,"write":2.5,"output":10}},{"name":"GPT-6.1 Sol","group":"other","per_million":0.3104,"per_coin":0.1552,"enterprise_ratio":3.22,"ultra_ratio":1.29,"source":"developers.openai.com/api/docs/pricing","prices":{"input":2,"read":0.1,"write":null,"output":10}},{"name":"Gemini 3.8 Flash","group":"other","per_million":0.1518,"per_coin":0.0759,"enterprise_ratio":6.59,"ultra_ratio":2.64,"source":"aistudio.google.com/docs/pricing","prices":{"input":0.75,"read":0.075,"write":null,"output":3.75}},{"name":"DeepSeek V4 Pro (heures pleines)","group":"other","per_million":0.15,"per_coin":0.075,"enterprise_ratio":6.67,"ultra_ratio":2.67,"source":"api-docs.deepseek.com/quick_start/pricing","prices":{"input":1.32,"read":0.044,"write":null,"output":3.96}},{"name":"MiniMax M3","group":"other","per_million":0.0852,"per_coin":0.0426,"enterprise_ratio":11.74,"ultra_ratio":4.7,"source":"platform.minimax.io/docs/guides/pricing-paygo","prices":{"input":0.3,"read":0.06,"write":null,"output":1.2}},{"name":"GLM-5.3-Flash","group":"other","per_million":0.0413,"per_coin":0.0206,"enterprise_ratio":24.22,"ultra_ratio":9.69,"source":"docs.z.ai/guides/overview/pricing","prices":{"input":0.15,"read":0.03,"write":null,"output":0.5}},{"name":"Claude Haiku 5.5","group":"claude","per_million":0.0213,"per_coin":0.0107,"enterprise_ratio":46.89,"ultra_ratio":18.76,"source":"platform.claude.com/docs/en/about-claude/pricing","prices":{"input":0.1,"read":0.01,"write":0.125,"output":0.5}},{"name":"GPT-6 Luna","group":"other","per_million":0.0202,"per_coin":0.0101,"enterprise_ratio":49.41,"ultra_ratio":19.76,"source":"developers.openai.com/api/docs/pricing","prices":{"input":0.1,"read":0.01,"write":null,"output":0.5}}],"split":{"bob":{"read":0.9436132878160362,"write":0.04344935623061327,"plain":2.605114341992017e-05,"output":0.012911304809930626},"Claude Sonnet 5.5":{"read":0.28409262618182257,"write":0.3270312604974395,"plain":0.00015686378826507773,"output":0.3887192495324729},"Claude Opus 5.5":{"read":0.28409262618182257,"write":0.3270312604974395,"plain":0.00015686378826507773,"output":0.3887192495324729}},"cache_cases":[{"read_weight":1.0,"coins_left":1.0,"saved":0.0,"usd_per_coin_at_050":0.5},{"read_weight":0.5,"coins_left":0.5282,"saved":0.4718,"usd_per_coin_at_050":0.2641},{"read_weight":0.25,"coins_left":0.2923,"saved":0.7077,"usd_per_coin_at_050":0.1461},{"read_weight":0.1,"coins_left":0.1507,"saved":0.8493,"usd_per_coin_at_050":0.0754}],"curve":{"Bob IDE 2.3.0":{"points":[[57.0,0.5],[60.8,1.0],[116.7,2.0],[116.8,3.0],[128.5,4.0],[128.8,5.0],[129.0,6.0],[156.7,7.0],[156.8,8.0],[176.7,9.0],[184.6,10.0],[196.9,11.0],[200.9,12.0],[204.9,13.0],[264.7,14.0],[308.4,15.0],[412.7,16.0],[617.1,17.0]],"total":19,"solved_weighted":17.0,"solved_last":17,"median_sec":185,"trials":20,"usd":27.72},"Bob Shell 2.0.7 et 2.0.9":{"points":[[26.6,0.333],[31.7,0.667],[34.7,1.0],[84.2,1.5],[84.5,2.0],[88.2,2.5],[89.0,3.0],[94.2,3.5],[98.9,4.0],[106.1,4.5],[108.6,5.5],[109.8,6.0],[128.8,6.5],[139.0,7.5],[142.9,8.5],[155.9,9.5],[176.6,10.5],[206.8,10.833],[207.9,11.167],[265.1,12.167],[283.4,13.167],[288.2,14.167],[306.9,14.5],[600.0,15.5]],"total":19,"solved_weighted":15.5,"solved_last":15,"median_sec":143,"trials":29,"usd":26.75},"GLM-5.3-Flash":{"points":[[36.0,1.0],[97.6,2.0],[115.6,3.0],[129.1,4.0],[219.2,5.0],[230.2,5.5],[236.8,6.5],[246.3,7.5],[296.3,8.5],[308.8,9.5],[372.4,10.5],[385.4,11.5],[404.4,12.5],[526.0,13.5],[552.1,14.5],[600.6,15.0],[919.9,16.0],[1388.9,17.0]],"total":19,"solved_weighted":17.0,"solved_last":18,"median_sec":372,"trials":22,"usd":1.05},"Claude Code, Sonnet 5.5":{"points":[[30.3,1.0],[31.4,2.0],[44.9,3.0],[48.0,4.0],[55.7,5.0],[62.7,6.0],[67.5,7.0],[68.1,8.0],[70.1,9.0],[70.9,10.0],[73.9,11.0],[77.5,12.0],[81.7,13.0],[86.8,14.0],[89.5,15.0],[90.3,16.0],[124.0,17.0],[172.8,18.0],[265.7,19.0]]},"Claude Code, Opus 5.5":{"points":[[33.7,1.0],[81.4,2.0],[95.2,3.0],[95.9,4.0],[135.9,5.0],[137.4,6.0],[145.7,7.0],[153.4,8.0],[156.8,9.0],[170.2,10.0],[188.4,11.0],[189.7,12.0],[212.3,13.0],[238.1,14.0],[239.9,15.0],[263.6,16.0],[275.5,17.0],[287.3,18.0],[687.7,19.0]]},"Claude Code, Haiku 5.5":{"points":[[24.5,1.0],[81.8,2.0],[88.3,3.0],[102.8,4.0],[116.0,5.0],[117.2,6.0],[117.3,7.0],[127.2,8.0],[160.5,9.0],[162.1,10.0],[202.7,11.0],[205.2,12.0],[217.1,13.0],[223.2,14.0],[255.0,15.0],[315.4,16.0],[352.9,17.0],[426.0,18.0],[510.8,19.0]]}},"cmp_ide":{"tasks":19,"glm_usd":1.0},"claude":{"Claude Code, Sonnet 5.5":{"usd":4.15,"tasks":19,"parity_ide":0.0749,"reward":0.9995,"sec":1612,"median_sec":71},"Claude Code, Opus 5.5":{"usd":15.35,"tasks":19,"parity_ide":0.2771,"reward":0.9994,"sec":3788,"median_sec":170},"Claude Code, Haiku 5.5":{"usd":1.05,"tasks":19,"parity_ide":0.019,"reward":1.0,"sec":3806,"median_sec":162}}};
+const NB = ' ';
+const fr = (v, d = 2) => v.toLocaleString('fr-FR', { minimumFractionDigits: d, maximumFractionDigits: d });
+const usd = (v, d = 2) => fr(v, d) + NB + '$';
+const usd0 = v => Math.round(v).toLocaleString('fr-FR') + NB + '$';
+const NS = 'http://www.w3.org/2000/svg';
+const byId = id => document.getElementById(id);
+function svgEl(name, attrs, parent, text) {
+  const n = document.createElementNS(NS, name);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  if (text !== undefined) n.textContent = text;
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function htmlEl(name, cls, parent, text) {
+  const n = document.createElement(name);
+  if (cls) n.className = cls;
+  if (text !== undefined) n.textContent = text;
+  if (parent) parent.appendChild(n);
+  return n;
+}
+
+/* one tooltip: values lead, a short stroke keys the series */
+const tip = byId('tip');
+function showTip(x, y, title, rows) {
+  tip.replaceChildren();
+  if (title) htmlEl('div', 't', tip, title);
+  for (const r of rows) {
+    const row = htmlEl('div', 'r', tip);
+    const key = htmlEl('span', r.color ? 'ln' : '', row);
+    if (r.color) { key.style.borderTopColor = r.color; if (r.dash) key.style.borderTopStyle = 'dashed'; }
+    htmlEl('b', '', row, r.value);
+    htmlEl('i', '', row, r.label || '');
+  }
+  tip.hidden = false;
+  const box = tip.getBoundingClientRect();
+  let left = x + 14, top = y + 14;
+  if (left + box.width > innerWidth - 8) left = Math.max(8, x - box.width - 14);
+  if (top + box.height > innerHeight - 8) top = Math.max(8, y - box.height - 14);
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+function hideTip() { tip.hidden = true; }
+function tipOn(node, make) {
+  node.addEventListener('pointermove', e => make(e.clientX, e.clientY));
+  node.addEventListener('pointerleave', hideTip);
+  node.addEventListener('focus', () => { const b = node.getBoundingClientRect(); make(b.left + Math.min(b.width, 120), b.top + b.height / 2); });
+  node.addEventListener('blur', hideTip);
+}
+const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+/* the Bobcoin ladder */
+const priceOf = name => DATA.prices.find(p => p.name === name);
+const LADDER_LEFT = [['Dépassement', 'Bob, pack de dépassement Enterprise'], ['Enterprise', 'Bob Enterprise, pack de 1 000'], ['Pro', 'Bob Pro, 20 $ pour 50'], ['Pro+', 'Bob Pro+, 60 $ pour 180'], ['Ultra', 'Bob Ultra, 200 $ pour 1 000']];
+const LADDER_RIGHT = ['Claude Opus 4.8', 'Claude Opus 5.5', 'Claude Sonnet 5', 'GLM-5.3', 'Claude Sonnet 5.5', 'GPT-6.1 Sol', 'GLM-5.3-Flash'];
+const LADDER_MEASURED = [['Claude Code, Opus 5.5', 'Code Opus 5.5, mesuré'], ['Claude Code, Sonnet 5.5', 'Code Sonnet 5.5, mesuré'], ['Claude Code, Haiku 5.5', 'Code Haiku 5.5, mesuré']].filter(([k]) => DATA.claude[k]);
+function dodge(items, gap, lo, hi) {
+  items.sort((a, b) => a.y - b.y);
+  for (let i = 0; i < items.length; i++) { items[i].ly = items[i].y; if (i && items[i].ly - items[i - 1].ly < gap) items[i].ly = items[i - 1].ly + gap; }
+  if (items.length && items[items.length - 1].ly > hi) { items[items.length - 1].ly = hi; for (let i = items.length - 2; i >= 0; i--) if (items[i + 1].ly - items[i].ly < gap) items[i].ly = items[i + 1].ly - gap; }
+  return items;
+}
+function drawLadder() {
+  const box = byId('ladder'); box.replaceChildren();
+  const W = Math.max(300, box.clientWidth), H = 500, top = 14, bottom = 16, narrow = W < 460;
+  const fs = narrow ? 12.5 : 14;
+  const svg = svgEl('svg', { viewBox: `0 0 ${W} ${H}`, width: '100%' }, box);
+  const y = v => top + (0.6 - v) / 0.6 * (H - top - bottom);
+  const axisX = Math.round(Math.max(116, W * 0.34));
+  svgEl('rect', { x: 0, y: y(0.28), width: W, height: y(0.08) - y(0.28), fill: 'var(--band)', rx: 3 }, svg);
+  svgEl('text', { x: 6, y: y(0.15) - 3, 'font-size': 12.5, 'font-weight': 700 }, svg, 'Zone à');
+  svgEl('text', { x: 6, y: y(0.15) + 12, 'font-size': 12.5, 'font-weight': 700 }, svg, 'négocier');
+  svgEl('line', { x1: axisX, x2: axisX, y1: y(0.6), y2: y(0), stroke: 'var(--axis)', 'stroke-width': 1 }, svg);
+  for (let v = 0; v <= 0.6001; v += 0.1) svgEl('line', { x1: axisX - 3, x2: axisX + 3, y1: y(v), y2: y(v), stroke: 'var(--axis)' }, svg);
+  svgEl('text', { x: axisX, y: y(0.6) - 3, 'text-anchor': 'middle', class: 'tick' }, svg, usd(0.6));
+  svgEl('text', { x: axisX, y: y(0) + 13, 'text-anchor': 'middle', class: 'tick' }, svg, '0' + NB + '$');
+  const mark = (item, side) => {
+    const g = svgEl('g', { tabindex: 0, role: 'img', 'aria-label': `${item.label}, ${usd(item.value)} le Bobcoin` }, svg);
+    const textX = side === 'left' ? axisX - 16 : axisX + 28;
+    if (Math.abs(item.ly - item.y) > 1 || side === 'right') svgEl('line', { x1: side === 'left' ? axisX - 6 : axisX + 6, x2: side === 'left' ? axisX - 13 : axisX + 25, y1: item.y, y2: item.ly, stroke: 'var(--axis)' }, g);
+    svgEl('circle', { cx: axisX, cy: item.y, r: 5, fill: item.color, stroke: 'var(--bg)', 'stroke-width': 2 }, g);
+    const t = svgEl('text', { x: textX, y: item.ly + fs * 0.35, 'text-anchor': side === 'left' ? 'end' : 'start', 'font-size': fs }, g);
+    svgEl('tspan', {}, t, item.short + NB);
+    svgEl('tspan', { 'font-weight': 700 }, t, usd(item.value, item.digits || 2));
+    const hitW = side === 'left' ? axisX : W - axisX;
+    svgEl('rect', { x: side === 'left' ? 0 : axisX, y: item.ly - 11, width: hitW, height: 22, fill: 'transparent' }, g);
+    tipOn(g, (x, yy) => showTip(x, yy, item.label, [{ value: usd(item.value, 3), label: 'le Bobcoin' }, { value: usd(item.value * 2, 3), label: 'le million de jetons' }]));
+  };
+  const left = LADDER_LEFT.map(([short, name]) => { const p = priceOf(name); return { short, label: name, value: p.per_coin, y: y(p.per_coin), color: 'var(--bob)' }; });
+  const right = LADDER_RIGHT.map(name => { const p = priceOf(name); return { short: name.replace(' (heures pleines)', '').replace('Claude ', narrow ? '' : 'Claude '), label: name + ', même mélange de jetons', value: p.per_coin, y: y(p.per_coin), color: p.group === 'claude' ? 'var(--claude)' : 'var(--other)' }; });
+  for (const [key, short] of LADDER_MEASURED) {
+    const v = DATA.claude[key].parity_ide;
+    right.push({ short: (narrow ? '' : 'Claude ') + short, label: key + ' : parité mesurée sur nos 19 tâches', value: v, y: y(v), color: 'var(--claude)', digits: 3 });
+  }
+  dodge(left, 19, top, H - bottom).forEach(i => mark(i, 'left'));
+  dodge(right, 19, top, H - bottom - 2).forEach(i => mark(i, 'right'));
+}
+
+/* solved tasks over time */
+const CURVE_SERIES = [
+  { name: 'Claude Code, Sonnet 5.5', color: 'var(--claude)' },
+  { name: 'Claude Code, Opus 5.5', color: 'var(--claude)', dash: '6 4' },
+  { name: 'Claude Code, Haiku 5.5', color: 'var(--claude)', dash: '2 4' },
+  { name: 'Bob IDE 2.3.0', color: 'var(--bob)' },
+  { name: 'Bob Shell 2.0.7 et 2.0.9', color: 'var(--bob)', dash: '6 4' },
+  { name: 'GLM-5.3-Flash', color: 'var(--glm)' },
+];
+function lineKeys(box, series) {
+  box.replaceChildren();
+  for (const s of series) {
+    const k = htmlEl('span', 'k', box);
+    const svg = svgEl('svg', { width: 22, height: 10, 'aria-hidden': 'true' }, k);
+    svgEl('line', { x1: 1, x2: 21, y1: 5, y2: 5, stroke: s.color, 'stroke-width': 2, 'stroke-linecap': 'round', ...(s.dash ? { 'stroke-dasharray': s.dash } : {}) }, svg);
+    k.appendChild(document.createTextNode(s.name));
+  }
+}
+function solvedAt(name, sec) {
+  let v = 0;
+  for (const [s, total] of DATA.curve[name].points) { if (s <= sec) v = total; else break; }
+  return v;
+}
+function drawCurve() {
+  const box = byId('curve'); box.replaceChildren();
+  const W = Math.max(300, box.clientWidth), H = W < 520 ? 280 : 340, m = { l: 30, r: 22, t: 10, b: 34 };
+  const svg = svgEl('svg', { viewBox: `0 0 ${W} ${H}`, width: '100%' }, box);
+  const XMAX = 1500, YMAX = 19;
+  const x = s => m.l + s / XMAX * (W - m.l - m.r), y = v => H - m.b - v / YMAX * (H - m.t - m.b);
+  for (const v of [0, 5, 10, 15, 19]) {
+    svgEl('line', { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), stroke: v ? 'var(--line)' : 'var(--axis)' }, svg);
+    svgEl('text', { x: m.l - 7, y: y(v) + 4, 'text-anchor': 'end', class: 'tick' }, svg, String(v));
+  }
+  for (const min of [0, 5, 10, 15, 20, 25]) svgEl('text', { x: x(min * 60), y: H - m.b + 18, 'text-anchor': 'middle', class: 'tick' }, svg, min ? min + NB + 'min' : '0');
+  for (const s of CURVE_SERIES) {
+    let d = `M${x(0)},${y(0)}`;
+    for (const [sec, total] of DATA.curve[s.name].points) d += `H${x(sec)}V${y(total)}`;
+    d += `H${x(XMAX)}`;
+    svgEl('path', { d, fill: 'none', stroke: s.color, 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round', ...(s.dash ? { 'stroke-dasharray': s.dash } : {}) }, svg);
+  }
+  const cross = svgEl('line', { y1: m.t, y2: H - m.b, stroke: 'var(--axis)', visibility: 'hidden' }, svg);
+  const hit = svgEl('rect', { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: 'transparent', tabindex: 0, 'aria-label': 'Lire les valeurs avec les flèches gauche et droite' }, svg);
+  let sec = 300;
+  const read = (cx, cy) => {
+    cross.setAttribute('x1', x(sec)); cross.setAttribute('x2', x(sec)); cross.setAttribute('visibility', 'visible');
+    showTip(cx, cy, `En ${sec < 600 ? fr(sec / 60, 1).replace(',0', '') : Math.round(sec / 60)} minutes par tâche`, CURVE_SERIES.map(s => ({ color: css(s.color.slice(4, -1)), dash: !!s.dash, value: fr(solvedAt(s.name, sec), 1).replace(',0', '') + ' sur 19', label: s.name })));
+  };
+  hit.addEventListener('pointermove', e => { const b = svg.getBoundingClientRect(); const px = (e.clientX - b.left) * W / b.width; sec = Math.max(0, Math.min(XMAX, (px - m.l) / (W - m.l - m.r) * XMAX)); sec = Math.round(sec / 10) * 10; read(e.clientX, e.clientY); });
+  hit.addEventListener('pointerleave', () => { hideTip(); cross.setAttribute('visibility', 'hidden'); });
+  hit.addEventListener('focus', () => { const b = svg.getBoundingClientRect(); read(b.left + x(sec) * b.width / W, b.top + 30); });
+  hit.addEventListener('blur', () => { hideTip(); cross.setAttribute('visibility', 'hidden'); });
+  hit.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); sec = Math.max(0, Math.min(XMAX, sec + (e.key === 'ArrowRight' ? 60 : -60))); const b = svg.getBoundingClientRect(); read(b.left + x(sec) * b.width / W, b.top + 30); } });
+}
+function fillCurveTable() {
+  const t = byId('curve-table'); t.replaceChildren();
+  const head = htmlEl('tr', '', htmlEl('thead', '', t));
+  htmlEl('th', '', head, 'Temps par tâche');
+  CURVE_SERIES.forEach(s => htmlEl('th', 'n', head, s.name));
+  const body = htmlEl('tbody', '', t);
+  for (const min of [1, 2, 3, 5, 10, 15, 25]) {
+    const r = htmlEl('tr', '', body);
+    htmlEl('th', '', r, min + NB + 'min');
+    CURVE_SERIES.forEach(s => htmlEl('td', 'n', r, fr(solvedAt(s.name, min * 60), 1)));
+  }
+}
+
+/* same tokens, market prices */
+function drawBars() {
+  const box = byId('bars'); box.replaceChildren();
+  const max = Math.max(...DATA.prices.map(p => p.per_million));
+  const label = n => n.replace(' (heures pleines)', ', heures pleines');
+  const measure = box.clientWidth < 620 ? box.clientWidth - 70 : box.clientWidth - 232 - 12 - 70;
+  for (const p of DATA.prices) {
+    const row = htmlEl('div', 'bar-row', box);
+    row.tabIndex = 0;
+    htmlEl('div', 'bar-name' + (p.group === 'bob' ? ' is-bob' : ''), row, label(p.name));
+    const track = htmlEl('div', 'bar-track', row);
+    const bar = htmlEl('div', 'bar bg-' + p.group, track);
+    bar.style.width = Math.max(2, p.per_million / max * measure) + 'px';
+    htmlEl('span', 'bar-val', track, usd(p.per_million));
+    tipOn(row, (x, y) => {
+      const rows = [{ value: usd(p.per_million, 3), label: 'le million, mélange de Bob' }, { value: usd(p.per_coin, 3), label: 'pour 500 000 jetons' }];
+      if (p.prices) rows.push({ value: `${p.prices.input} / ${p.prices.read} / ${p.prices.write === null ? p.prices.input : p.prices.write} / ${p.prices.output}`, label: 'entrée, lecture, écriture, sortie' });
+      if (p.enterprise_ratio) rows.push({ value: fr(p.enterprise_ratio, 2) + NB + 'fois', label: 'moins cher que le pack Enterprise' });
+      showTip(x, y, label(p.name), rows);
+    });
+  }
+}
+function drawSegments() {
+  const box = byId('segments'); box.replaceChildren();
+  const rows = [['Bob, tous tarifs', DATA.split.bob], ['Claude Sonnet 5.5 et Opus 5.5', DATA.split['Claude Sonnet 5.5']]];
+  const parts = [['read', 'Relecture de cache', 'var(--seg1)', 'var(--seg1-ink)'], ['write', 'Écriture de cache', 'var(--seg2)', 'var(--seg2-ink)'], ['output', 'Sortie', 'var(--seg3)', 'var(--seg3-ink)']];
+  for (const [name, split] of rows) {
+    const r = htmlEl('div', 'seg-row', box);
+    htmlEl('div', 'seg-name', r, name);
+    const bar = htmlEl('div', 'seg-bar', r);
+    for (const [key, partName, color, ink] of parts) {
+      const share = split[key];
+      const s = htmlEl('div', 'seg', bar);
+      s.style.flex = `${share} 1 0`;
+      s.style.background = color;
+      s.style.color = ink;
+      s.tabIndex = 0;
+      s.setAttribute('role', 'img');
+      s.setAttribute('aria-label', `${name}, ${partName}, ${fr(share * 100, 1)} %`);
+      if (share > 0.08) s.textContent = fr(share * 100, 0) + NB + '%';
+      tipOn(s, (x, y) => showTip(x, y, name, [{ value: fr(share * 100, 1) + NB + '%', label: partName }]));
+    }
+  }
+  const t = byId('cache-table'); t.replaceChildren();
+  for (const c of DATA.cache_cases) {
+    const r = htmlEl('tr', '', t);
+    htmlEl('th', '', r, fr(c.read_weight * 100, 0) + NB + '%' + (c.read_weight === 1 ? ", aujourd'hui" : ''));
+    htmlEl('td', 'n', r, c.saved ? fr(c.saved * 100, 0) + NB + '%' : 'Rien');
+    htmlEl('td', 'n', r, usd(c.usd_per_coin_at_050));
+  }
+}
+
+/* full cost per developer: the simulator */
+const SONNET_TASK = DATA.claude['Claude Code, Sonnet 5.5'].usd / DATA.claude['Claude Code, Sonnet 5.5'].tasks;
+const OPUS_TASK = DATA.claude['Claude Code, Opus 5.5'].usd / DATA.claude['Claude Code, Opus 5.5'].tasks;
+const GLM_PER_TASK = DATA.cmp_ide.glm_usd / DATA.cmp_ide.tasks;
+const CLAUDE_SEAT = 20;
+const LIST = 0.50;
+const state = {};
+function readState() {
+  state.price = +byId('s-price').value;
+  state.seat = +byId('s-seat').value;
+  state.cache = +byId('s-cache').value / 100;
+  state.tasks = +byId('s-tasks').value;
+  state.coins = +byId('s-coins').value;
+  state.devs = +byId('s-devs').value;
+  state.support = byId('s-support').checked ? 1.15 : 1;
+}
+const COST = {
+  list: t => state.seat + t * state.coins * LIST * state.support,
+  asked: t => state.seat + t * state.coins * (1 - DATA.mix.read * (1 - state.cache)) * state.price * state.support,
+  at: (t, price) => state.seat + t * state.coins * price * state.support,
+  ultra: t => { const c = t * state.coins; return 200 + Math.max(0, c - 1000) * LIST; },
+  opus: t => CLAUDE_SEAT + t * OPUS_TASK,
+  sonnet: t => CLAUDE_SEAT + t * SONNET_TASK,
+  glm: t => t * GLM_PER_TASK,
+};
+const COST_SERIES = [
+  { id: 'list', name: 'Bob Enterprise, prix de liste', color: 'var(--bob)' },
+  { id: 'asked', name: 'Bob Enterprise, prix négocié', color: 'var(--bob)', dash: '7 4' },
+  { id: 'ultra', name: 'Bob Ultra, forfait individuel', color: 'var(--bob)', dash: '2 4' },
+  { id: 'opus', name: 'Claude Code Enterprise, Opus 5.5 mesuré', color: 'var(--claude)' },
+  { id: 'sonnet', name: 'Claude Code Enterprise, Sonnet 5.5 mesuré', color: 'var(--claude)', dash: '7 4' },
+  { id: 'glm', name: 'GLM-5.3-Flash, tarif payant', color: 'var(--glm)' },
+];
+function drawCost() {
+  const box = byId('costchart'); box.replaceChildren();
+  const W = Math.max(280, box.clientWidth), H = W < 520 ? 300 : 370, m = { l: 44, r: 12, t: 10, b: 34 };
+  const svg = svgEl('svg', { viewBox: `0 0 ${W} ${H}`, width: '100%' }, box);
+  const XMAX = 400;
+  const peak = Math.max(...COST_SERIES.map(s => COST[s.id](XMAX)), 300);
+  const YMAX = Math.ceil(peak / 100) * 100;
+  const step = YMAX > 1000 ? 500 : YMAX > 500 ? 200 : 100;
+  const x = t => m.l + t / XMAX * (W - m.l - m.r), y = v => H - m.b - v / YMAX * (H - m.t - m.b);
+  svgEl('rect', { x: m.l, y: y(270), width: W - m.l - m.r, height: y(170) - y(270), fill: 'var(--wash)' }, svg);
+  svgEl('text', { x: m.l + 6, y: y(270) + 14, 'font-size': 12, style: 'fill:var(--muted)' }, svg, W < 620 ? 'Moyenne Claude Code' : 'Moyenne publiée pour Claude Code, plus le poste');
+  for (let v = 0; v <= YMAX; v += step) {
+    svgEl('line', { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), stroke: v ? 'var(--line)' : 'var(--axis)' }, svg);
+    svgEl('text', { x: m.l - 7, y: y(v) + 4, 'text-anchor': 'end', class: 'tick' }, svg, v.toLocaleString('fr-FR') + NB + '$');
+  }
+  for (const t of [0, 100, 200, 300, 400]) svgEl('text', { x: x(t), y: H - m.b + 18, 'text-anchor': 'middle', class: 'tick' }, svg, t ? String(t) : '0 tâche');
+  for (const s of COST_SERIES) {
+    let d = '';
+    for (let t = 0; t <= XMAX; t += 5) d += (t ? 'L' : 'M') + x(t) + ',' + y(COST[s.id](t));
+    svgEl('path', { d, fill: 'none', stroke: s.color, 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round', ...(s.dash ? { 'stroke-dasharray': s.dash } : {}) }, svg);
+  }
+  const now = svgEl('line', { x1: x(state.tasks), x2: x(state.tasks), y1: m.t, y2: H - m.b, stroke: 'var(--ink2)', 'stroke-width': 1 }, svg);
+  for (const id of ['list', 'asked', 'opus', 'sonnet']) svgEl('circle', { cx: x(state.tasks), cy: y(COST[id](state.tasks)), r: 4.5, fill: COST_SERIES.find(s => s.id === id).color, stroke: 'var(--surface)', 'stroke-width': 2 }, svg);
+  const cross = svgEl('line', { y1: m.t, y2: H - m.b, stroke: 'var(--axis)', visibility: 'hidden' }, svg);
+  const hit = svgEl('rect', { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: 'transparent', tabindex: 0, 'aria-label': 'Lire les valeurs avec les flèches gauche et droite' }, svg);
+  let t0 = state.tasks;
+  const read = (cx, cy) => {
+    cross.setAttribute('x1', x(t0)); cross.setAttribute('x2', x(t0)); cross.setAttribute('visibility', 'visible');
+    const rows = COST_SERIES.map(s => ({ color: css(s.color.slice(4, -1)), dash: !!s.dash, value: usd0(COST[s.id](t0)), label: s.name }));
+    showTip(cx, cy, `${t0} tâches par mois`, rows);
+  };
+  hit.addEventListener('pointermove', e => { const b = svg.getBoundingClientRect(); const px = (e.clientX - b.left) * W / b.width; t0 = Math.round(Math.max(0, Math.min(XMAX, (px - m.l) / (W - m.l - m.r) * XMAX)) / 5) * 5; read(e.clientX, e.clientY); });
+  hit.addEventListener('pointerleave', () => { hideTip(); cross.setAttribute('visibility', 'hidden'); });
+  hit.addEventListener('focus', () => { const b = svg.getBoundingClientRect(); read(b.left + x(t0) * b.width / W, b.top + 30); });
+  hit.addEventListener('blur', () => { hideTip(); cross.setAttribute('visibility', 'hidden'); });
+  hit.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); t0 = Math.max(0, Math.min(XMAX, t0 + (e.key === 'ArrowRight' ? 10 : -10))); const b = svg.getBoundingClientRect(); read(b.left + x(t0) * b.width / W, b.top + 30); } });
+}
+function tile(parent, label, monthly, sub) {
+  const t = htmlEl('div', 'tile', parent);
+  htmlEl('span', 'lab', t, label);
+  htmlEl('span', 'val', t, usd0(monthly));
+  htmlEl('span', 'sub', t, sub);
+}
+function fillSim() {
+  readState();
+  byId('o-price').textContent = usd(state.price);
+  byId('o-seat').textContent = usd(state.seat, 0);
+  byId('o-cache').textContent = fr(state.cache * 100, 0) + NB + '%';
+  byId('o-tasks').textContent = String(state.tasks);
+  byId('o-coins').textContent = fr(state.coins, 2);
+  byId('o-devs').textContent = state.devs.toLocaleString('fr-FR');
+  const yearly = v => usd0(v * state.devs * 12) + ' par an';
+  const box = byId('tiles'); box.replaceChildren();
+  const list = COST.list(state.tasks), asked = COST.asked(state.tasks);
+  tile(box, 'Bob au prix de liste, par développeur et par mois', list, yearly(list));
+  tile(box, 'Bob au prix négocié', asked, yearly(asked));
+  tile(box, 'Économie par an', (list - asked) * state.devs * 12, `${fr((1 - asked / list) * 100, 0)}${NB}% de la facture`);
+  tile(box, 'Claude Code Enterprise, Opus 5.5 mesuré', COST.opus(state.tasks), yearly(COST.opus(state.tasks)));
+  tile(box, 'Claude Code Enterprise, Sonnet 5.5 mesuré', COST.sonnet(state.tasks), yearly(COST.sonnet(state.tasks)));
+  drawCost();
+  const t = byId('cost-table'); t.replaceChildren();
+  const head = htmlEl('tr', '', htmlEl('thead', '', t));
+  htmlEl('th', '', head, 'Tâches par mois');
+  COST_SERIES.forEach(s => htmlEl('th', 'n', head, s.name));
+  const body = htmlEl('tbody', '', t);
+  for (const n of [50, 100, 200, 300, 400]) {
+    const r = htmlEl('tr', '', body);
+    htmlEl('th', '', r, String(n));
+    COST_SERIES.forEach(s => htmlEl('td', 'n', r, usd0(COST[s.id](n))));
+  }
+  fillNego();
+}
+const POSITIONS = [
+  ['Liste', 0.50, "Pack Enterprise d'après la documentation d'IBM"],
+  ['À ne pas dépasser', 0.28, 'Bob coûte alors autant que Claude Code avec Opus 5.5 sur nos 19 tâches, pour un résultat moins bon'],
+  ['Cible haute', 0.25, 'Sous la parité avec Opus 5.5, avec une marge'],
+  ['Cible', 0.20, "Le prix qu'IBM pratique déjà sur Ultra"],
+  ['Ouverture', 0.075, 'Bob coûte alors autant que Claude Code avec Sonnet 5.5, qui fait mieux et plus vite'],
+];
+function fillNego() {
+  const t = byId('nego-table'); t.replaceChildren();
+  for (const [name, price, why] of POSITIONS) {
+    const r = htmlEl('tr', '', t);
+    htmlEl('th', '', r, name);
+    htmlEl('td', 'n best', r, usd(price, price < 0.1 ? 3 : 2));
+    htmlEl('td', 'n', r, price === LIST ? 'Aucune' : '−' + fr((1 - price / LIST) * 100, 0) + NB + '%');
+    htmlEl('td', '', r, why);
+    htmlEl('td', 'n', r, usd0(COST.at(state.tasks, price) * state.devs * 12));
+  }
+  byId('nego-note').textContent = `Facture calculée pour ${state.devs.toLocaleString('fr-FR')} développeurs, ${state.tasks} tâches par mois et par développeur, ${fr(state.coins, 2)} Bobcoins par tâche et un poste à ${usd(state.seat, 0)}${state.support > 1 ? ', support à 15 % compris' : ''}. Ces cibles sont notre estimation, à valider avec votre service achats.`;
+}
+
+function drawAll() { drawLadder(); drawCurve(); drawBars(); fillSim(); }
+lineKeys(byId('curve-keys'), CURVE_SERIES);
+lineKeys(byId('cost-keys'), COST_SERIES);
+fillCurveTable();
+drawSegments();
+drawAll();
+for (const id of ['s-price', 's-seat', 's-cache', 's-tasks', 's-coins', 's-devs', 's-support']) byId(id).addEventListener('input', fillSim);
+let lastWidth = 0, pending = 0;
+new ResizeObserver(entries => {
+  const w = entries[0].contentRect.width;
+  if (Math.abs(w - lastWidth) < 2) return;
+  lastWidth = w;
+  cancelAnimationFrame(pending);
+  pending = requestAnimationFrame(drawAll);
+}).observe(document.querySelector('.page'));
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawAll);
+</script>
+
+</body></html>
